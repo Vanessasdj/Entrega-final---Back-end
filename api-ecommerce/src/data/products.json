@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "title": "Camiseta",
+    "description": "Camiseta 100% algodão",
+    "code": "CAM001",
+    "price": 49.9,
+    "status": true,
+    "stock": 100,
+    "category": "Roupas",
+    "thumbnails": [
+      "img/camiseta1.jpg"
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Tênis",
+    "description": "Tênis esportivo confortável",
+    "code": "TEN001",
+    "price": 199.9,
+    "status": true,
+    "stock": 50,
+    "category": "Calçados",
+    "thumbnails": [
+      "img/tenis1.jpg"
+    ]
+  },
+  {
+    "id": "3",
+    "title": "Produto Teste",
+    "description": "Descrição do produto",
+    "code": "ABC123",
+    "price": 99.99,
+    "status": true,
+    "stock": 10,
+    "category": "categoria",
+    "thumbnails": [
+      "imagem1.jpg",
+      "imagem2.jpg"
+    ]
+  }
+]
