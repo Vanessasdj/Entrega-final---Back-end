@@ -1,0 +1,25 @@
+<!-- filepath: c:\PRIMEIRA ENTREGA\api-ecommerce\src\views\realTimeProducts.handlebars -->
+<h1>Produtos em tempo real</h1>
+<ul id="product-list">
+  {{#each products}}
+    <li>{{this.name}} - {{this.price}}</li>
+  {{/each}}
+</ul>
+
+<form id="add-product-form">
+  <input type="text" name="name" placeholder="Nome do produto" required />
+  <input type="number" name="price" placeholder="Preço" required />
+  <button type="submit">Adicionar Produto</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io(); socket.on("updateProducts", (products) => { const list =
+  document.getElementById("product-list"); list.innerHTML = "";
+  products.forEach((p) => { const li = document.createElement("li");
+  li.textContent = `${p.name} - ${p.price}`; list.appendChild(li); }); });
+  document.getElementById("add-product-form").addEventListener("submit", (e) =>
+  { e.preventDefault(); const name = e.target.name.value; const price =
+  e.target.price.value; socket.emit("addProduct", { name, price });
+  e.target.reset(); });
+</script>

@@ -1,28 +1,29 @@
 const express = require("express");
-const CartManager = require("../managers/CartManager");
 const router = express.Router();
-const cm = new CartManager();
+const products = require("../data/products");
+const carts = require("../data/carts");
 
-router.post("/", (req, res) => {
-  const newCart = cm.createCart();
-  res.status(201).json(newCart);
+router.get("/", (req, res) => {
+  res.json(carts);
 });
 
-router.get("/:cid", (req, res) => {
-  const cart = cm.getCartById(req.params.cid);
-  if (cart) res.json(cart.products);
-  else res.status(404).json({ error: "Carrinho não encontrado" });
-});
+router.post("/:cartId/products/:productId", (req, res) => {
+  const { cartId, productId } = req.params;
 
-router.post("/:cid/product/:pid", (req, res) => {
-  const quantity = req.body.quantity ? Number(req.body.quantity) : 1;
-  const updatedCart = cm.addProductToCart(
-    req.params.cid,
-    req.params.pid,
-    quantity
-  );
-  if (updatedCart) res.json(updatedCart);
-  else res.status(404).json({ error: "Carrinho não encontrado" });
+  const productExists = products.find((p) => p.id === productId);
+  if (!productExists) {
+    return res.status(404).json({ error: "Produto não encontrado." });
+  }
+
+  const cart = carts.find((c) => c.id === cartId);
+  if (!cart) {
+    return res.status(404).json({ error: "Carrinho não encontrado." });
+  }
+
+  cart.products.push(productId);
+  res
+    .status(200)
+    .json({ message: "Produto adicionado ao carrinho com sucesso." });
 });
 
 module.exports = router;

@@ -38,5 +38,31 @@
       "imagem1.jpg",
       "imagem2.jpg"
     ]
+  },
+  {
+    "id": "4",
+    "title": "Boné",
+    "description": "Boné estiloso",
+    "code": "BON001",
+    "price": 29.9,
+    "status": true,
+    "stock": 30,
+    "category": "Acessórios",
+    "thumbnails": [
+      "img/bone1.jpg"
+    ]
+  },
+  {
+    "id": "5",
+    "title": "Boné",
+    "description": "Boné estiloso",
+    "code": "BON001",
+    "price": 29.9,
+    "status": true,
+    "stock": 30,
+    "category": "Acessórios",
+    "thumbnails": [
+      "img/bone1.jpg"
+    ]
   }
 ]
