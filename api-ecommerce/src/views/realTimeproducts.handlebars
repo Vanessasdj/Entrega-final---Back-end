@@ -2,12 +2,17 @@
 <h1>Produtos em tempo real</h1>
 <ul id="product-list">
   {{#each products}}
-    <li>{{this.name}} - {{this.price}}</li>
+    <li>
+      {{this.title}}
+      -
+      {{this.price}}
+      <button onclick="deleteProduct('{{this.id}}')">Excluir</button>
+    </li>
   {{/each}}
 </ul>
 
 <form id="add-product-form">
-  <input type="text" name="name" placeholder="Nome do produto" required />
+  <input type="text" name="title" placeholder="Nome do produto" required />
   <input type="number" name="price" placeholder="Preço" required />
   <button type="submit">Adicionar Produto</button>
 </form>
@@ -17,9 +22,12 @@
   const socket = io(); socket.on("updateProducts", (products) => { const list =
   document.getElementById("product-list"); list.innerHTML = "";
   products.forEach((p) => { const li = document.createElement("li");
-  li.textContent = `${p.name} - ${p.price}`; list.appendChild(li); }); });
+  li.textContent = `${p.title} - ${p.price} `; const btn =
+  document.createElement("button"); btn.textContent = "Excluir"; btn.onclick =
+  () => deleteProduct(p.id); li.appendChild(btn); list.appendChild(li); }); });
   document.getElementById("add-product-form").addEventListener("submit", (e) =>
-  { e.preventDefault(); const name = e.target.name.value; const price =
-  e.target.price.value; socket.emit("addProduct", { name, price });
-  e.target.reset(); });
+  { e.preventDefault(); const title = e.target.title.value; const price =
+  e.target.price.value; socket.emit("addProduct", { title, price });
+  e.target.reset(); }); function deleteProduct(id) {
+  socket.emit("deleteProduct", id); }
 </script>

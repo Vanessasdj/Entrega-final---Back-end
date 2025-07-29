@@ -1,0 +1,33 @@
+<!-- filepath: c:\SEGUNDA ENTREGA\api-ecommerce\src\views\products.handlebars -->
+<h1>Produtos</h1>
+<ul>
+  {{#each products}}
+    <li>
+      <strong>{{title}}</strong>
+      - R$ {{price}}<br />
+      Categoria: {{category}}<br />
+      <a href="/products/{{_id}}">Ver detalhes</a>
+      <!-- Botão adicionar ao carrinho -->
+      <form
+        action="/api/carts/{{../cartId}}/products/{{_id}}"
+        method="post"
+        style="display:inline;"
+      >
+        <button type="submit">Adicionar ao carrinho</button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<div>
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}">Página anterior</a>
+  {{/if}}
+  Página
+  {{page}}
+  de
+  {{totalPages}}
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}">Próxima página</a>
+  {{/if}}
+</div>

@@ -1,39 +1,47 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 
 class CartManager {
-  constructor() {
-    this.filePath = path.join(__dirname, "../data/carts.json");
-    this.carts = this.loadCarts();
+  constructor(filePath = path.join(__dirname, "../data/carts.json")) {
+    this.filePath = filePath;
   }
 
-  loadCarts() {
-    if (!fs.existsSync(this.filePath)) return [];
-    const data = fs.readFileSync(this.filePath);
-    return JSON.parse(data);
+  async loadCarts() {
+    try {
+      const data = await fs.readFile(this.filePath, "utf-8");
+      return JSON.parse(data);
+    } catch (err) {
+      if (err.code === "ENOENT") return [];
+      throw err;
+    }
   }
 
-  saveCarts() {
-    fs.writeFileSync(this.filePath, JSON.stringify(this.carts, null, 2));
+  async saveCarts(carts) {
+    await fs.writeFile(this.filePath, JSON.stringify(carts, null, 2));
   }
 
-  createCart() {
+  async createCart() {
+    const carts = await this.loadCarts();
     const newId =
-      this.carts.length > 0
-        ? String(Number(this.carts[this.carts.length - 1].id) + 1)
-        : "1";
+      carts.length > 0 ? String(Number(carts[carts.length - 1].id) + 1) : "1";
     const newCart = { id: newId, products: [] };
-    this.carts.push(newCart);
-    this.saveCarts();
+    carts.push(newCart);
+    await this.saveCarts(carts);
     return newCart;
   }
 
-  getCartById(cid) {
-    return this.carts.find((c) => String(c.id) === String(cid));
+  async getCartById(cid) {
+    const carts = await this.loadCarts();
+    return carts.find((c) => String(c.id) === String(cid));
   }
 
-  addProductToCart(cid, pid, quantity = 1) {
-    const cart = this.getCartById(cid);
+  async getAllCarts() {
+    return await this.loadCarts();
+  }
+
+  async addProductToCart(cid, pid, quantity = 1) {
+    const carts = await this.loadCarts();
+    const cart = carts.find((c) => String(c.id) === String(cid));
     if (!cart) return null;
     const prod = cart.products.find((p) => String(p.product) === String(pid));
     if (prod) {
@@ -41,7 +49,27 @@ class CartManager {
     } else {
       cart.products.push({ product: pid, quantity });
     }
-    this.saveCarts();
+    await this.saveCarts(carts);
+    return cart;
+  }
+
+  async removeProductFromCart(cid, pid) {
+    const carts = await this.loadCarts();
+    const cart = carts.find((c) => String(c.id) === String(cid));
+    if (!cart) return null;
+    cart.products = cart.products.filter(
+      (p) => String(p.product) !== String(pid)
+    );
+    await this.saveCarts(carts);
+    return cart;
+  }
+
+  async updateCart(cid, products) {
+    const carts = await this.loadCarts();
+    const cart = carts.find((c) => String(c.id) === String(cid));
+    if (!cart) return null;
+    cart.products = products;
+    await this.saveCarts(carts);
     return cart;
   }
 }

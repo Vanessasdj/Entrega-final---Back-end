@@ -1,0 +1,14 @@
+<!-- filepath: c:\SEGUNDA ENTREGA\api-ecommerce\src\views\cart.handlebars -->
+<h1>Carrinho</h1>
+<ul>
+  {{#each cart.products}}
+    <li>
+      <strong>{{this.product.title}}</strong>
+      - Quantidade:
+      {{this.quantity}}<br />
+      Preço unitário: R$
+      {{this.product.price}}
+    </li>
+  {{/each}}
+</ul>
+<a href="/products">Continuar comprando</a>

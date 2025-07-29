@@ -1,18 +1,5 @@
 [
   {
-    "id": "1",
-    "title": "Camiseta",
-    "description": "Camiseta 100% algodão",
-    "code": "CAM001",
-    "price": 49.9,
-    "status": true,
-    "stock": 100,
-    "category": "Roupas",
-    "thumbnails": [
-      "img/camiseta1.jpg"
-    ]
-  },
-  {
     "id": "2",
     "title": "Tênis",
     "description": "Tênis esportivo confortável",

@@ -1,0 +1,11 @@
+<!-- filepath: c:\SEGUNDA ENTREGA\api-ecommerce\src\views\productDetail.handlebars -->
+<h1>{{product.title}}</h1>
+<p>{{product.description}}</p>
+<p>Preço: R$ {{product.price}}</p>
+<p>Categoria: {{product.category}}</p>
+<p>Estoque: {{product.stock}}</p>
+<!-- Botão adicionar ao carrinho -->
+<form action="/api/carts/SEU_CART_ID/products/{{product._id}}" method="post">
+  <button type="submit">Adicionar ao carrinho</button>
+</form>
+<a href="/products">Voltar para produtos</a>
