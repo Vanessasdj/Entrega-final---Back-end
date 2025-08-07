@@ -1,14 +1,48 @@
 <!-- filepath: c:\SEGUNDA ENTREGA\api-ecommerce\src\views\cart.handlebars -->
-<h1>Carrinho</h1>
+<h1>Carrinho ID: {{cart._id}}</h1>
+
+{{#if cart.products.length}}
 <ul>
   {{#each cart.products}}
-    <li>
-      <strong>{{this.product.title}}</strong>
-      - Quantidade:
-      {{this.quantity}}<br />
-      Preço unitário: R$
-      {{this.product.price}}
+    <li style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd;">
+      <strong>{{this.product.title}}</strong><br />
+      <em>{{this.product.description}}</em><br />
+      
+      <strong>Quantidade:</strong> {{this.quantity}}<br />
+      <strong>Preço unitário:</strong> R$ {{this.product.price}}<br />
+      <strong>Subtotal:</strong> R$ {{#multiply this.quantity this.product.price}}{{/multiply}}<br />
+      
+      <div style="margin-top: 10px;">
+        <!-- Botão para remover produto -->
+        <form action="/api/carts/{{../cart._id}}/products/{{this.product._id}}" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="DELETE">
+          <button type="submit" style="background-color: #ff6b6b; color: white;">Remover</button>
+        </form>
+        
+        <!-- Link para ver detalhes do produto -->
+        <a href="/products/{{this.product._id}}?cartId={{../cart._id}}" style="margin-left: 10px;">Ver detalhes</a>
+      </div>
     </li>
   {{/each}}
 </ul>
-<a href="/products">Continuar comprando</a>
+
+<div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+  <h3>Total do carrinho: R$ {{#cartTotal cart.products}}{{/cartTotal}}</h3>
+</div>
+
+<div style="margin-top: 20px;">
+  <form action="/api/carts/{{cart._id}}" method="post" style="display:inline;">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" style="background-color: #dc3545; color: white;">Limpar carrinho</button>
+  </form>
+</div>
+
+{{else}}
+<p>Seu carrinho está vazio.</p>
+{{/if}}
+
+<div style="margin-top: 20px;">
+  <a href="/products?cartId={{cart._id}}" style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+    Continuar comprando
+  </a>
+</div>

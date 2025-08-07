@@ -22,7 +22,9 @@ router.get("/products", async (req, res) => {
 
   if (query) {
     if (query.startsWith("category=")) {
-      filter.category = query.split("=")[1];
+      const categoryValue = query.split("=")[1];
+      // Busca case-insensitive usando regex
+      filter.category = { $regex: new RegExp(`^${categoryValue}$`, "i") };
     } else if (query.startsWith("status=")) {
       filter.status = query.split("=")[1] === "true";
     }
@@ -65,9 +67,10 @@ router.get("/products", async (req, res) => {
 
 // Página de detalhes do produto
 router.get("/products/:pid", async (req, res) => {
+  const { cartId } = req.query;
   const product = await Product.findById(req.params.pid).lean();
   if (!product) return res.status(404).render("404");
-  res.render("productDetail", { product });
+  res.render("productDetail", { product, cartId });
 });
 
 // Página de um carrinho específico

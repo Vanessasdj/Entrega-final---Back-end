@@ -1,20 +1,35 @@
 <!-- filepath: c:\SEGUNDA ENTREGA\api-ecommerce\src\views\products.handlebars -->
 <h1>Produtos</h1>
+
+{{#if cartId}}
+<p><strong>Carrinho ID:</strong> {{cartId}} | <a href="/carts/{{cartId}}">Ver carrinho</a></p>
+{{/if}}
+
 <ul>
   {{#each products}}
     <li>
       <strong>{{title}}</strong>
       - R$ {{price}}<br />
       Categoria: {{category}}<br />
-      <a href="/products/{{_id}}">Ver detalhes</a>
+      Estoque: {{stock}}<br />
+      Status: {{#if status}}Disponível{{else}}Indisponível{{/if}}<br />
+      
+      <a href="/products/{{_id}}{{#if ../cartId}}?cartId={{../cartId}}{{/if}}">Ver detalhes</a>
+      
       <!-- Botão adicionar ao carrinho -->
-      <form
-        action="/api/carts/{{../cartId}}/products/{{_id}}"
-        method="post"
-        style="display:inline;"
-      >
-        <button type="submit">Adicionar ao carrinho</button>
-      </form>
+      {{#if ../cartId}}
+        <form
+          action="/api/carts/{{../cartId}}/products/{{_id}}"
+          method="post"
+          style="display:inline;"
+        >
+          <button type="submit" {{#unless status}}disabled{{/unless}}>
+            {{#if status}}Adicionar ao carrinho{{else}}Indisponível{{/if}}
+          </button>
+        </form>
+      {{else}}
+        <button disabled>Carrinho necessário</button>
+      {{/if}}
     </li>
   {{/each}}
 </ul>
@@ -31,3 +46,12 @@
     <a href="{{nextLink}}">Próxima página</a>
   {{/if}}
 </div>
+
+{{#unless cartId}}
+<div style="margin-top: 20px; padding: 10px; background-color: #f0f0f0;">
+  <p><strong>Para adicionar produtos ao carrinho, você precisa ter um carrinho criado.</strong></p>
+  <form action="/api/carts" method="post">
+    <button type="submit">Criar novo carrinho</button>
+  </form>
+</div>
+{{/unless}}

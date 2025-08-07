@@ -9,7 +9,9 @@ router.get("/", async (req, res) => {
 
     if (query) {
       if (query.startsWith("category=")) {
-        filter.category = query.split("=")[1];
+        const categoryValue = query.split("=")[1];
+        // Busca case-insensitive usando regex
+        filter.category = { $regex: new RegExp(`^${categoryValue}$`, "i") };
       } else if (query.startsWith("status=")) {
         filter.status = query.split("=")[1] === "true";
       }

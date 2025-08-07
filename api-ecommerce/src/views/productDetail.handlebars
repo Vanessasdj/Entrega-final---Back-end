@@ -4,8 +4,21 @@
 <p>Preço: R$ {{product.price}}</p>
 <p>Categoria: {{product.category}}</p>
 <p>Estoque: {{product.stock}}</p>
-<!-- Botão adicionar ao carrinho -->
-<form action="/api/carts/SEU_CART_ID/products/{{product._id}}" method="post">
-  <button type="submit">Adicionar ao carrinho</button>
+<p>Status: {{#if product.status}}Disponível{{else}}Indisponível{{/if}}</p>
+
+{{#if product.thumbnails}}
+<div>
+  <h3>Imagens:</h3>
+  {{#each product.thumbnails}}
+    <img src="{{this}}" alt="{{../product.title}}" style="max-width: 200px; margin: 5px;">
+  {{/each}}
+</div>
+{{/if}}
+
+<!-- Botão adicionar ao carrinho - usar cartId dinâmico -->
+<form action="/api/carts/{{cartId}}/products/{{product._id}}" method="post">
+  <button type="submit" {{#unless product.status}}disabled{{/unless}}>
+    {{#if product.status}}Adicionar ao carrinho{{else}}Produto indisponível{{/if}}
+  </button>
 </form>
-<a href="/products">Voltar para produtos</a>
+<a href="/products{{#if cartId}}?cartId={{cartId}}{{/if}}">Voltar para produtos</a>
